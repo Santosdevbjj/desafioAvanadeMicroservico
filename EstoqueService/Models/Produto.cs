@@ -1,10 +1,9 @@
-namespace EstoqueService.Models;
-
-public class Produto
+namespace EstoqueService.Models
 {
-    public int Id { get; set; }
-    public string Nome { get; set; } = string.Empty;
-    public string Descricao { get; set; } = string.Empty;
-    public decimal Preco { get; set; }
-    public int Quantidade { get; set; }
+    public class Produto
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public int Quantidade { get; set; }
+    }
 }
