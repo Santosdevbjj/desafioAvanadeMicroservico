@@ -93,6 +93,41 @@ docker logs estoqueservice
 
 ---
 
+---
+
+📌 Como usar o API Gateway
+
+1. Subir tudo:
+
+
+
+docker-compose up --build -d
+
+2. Testar rotas via Gateway:
+
+
+
+Produtos:
+
+curl http://localhost:5000/estoque/produto
+
+Pedidos:
+
+curl http://localhost:5000/vendas/pedido
+
+
+3. Acessar RabbitMQ em http://localhost:15672
+
+
+4. Acessar banco via phpMyAdmin em http://localhost:8081
+
+
+
+
+---
+
+
+
 
 
 
