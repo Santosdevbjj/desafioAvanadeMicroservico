@@ -126,6 +126,44 @@ curl http://localhost:5000/vendas/pedido
 
 ---
 
+---
+
+✅ Detalhes importantes
+
+1. Rotas do EstoqueService:
+
+GET /estoque/produto → Lista todos os produtos
+
+POST /estoque/produto → Cria um novo produto
+
+GET /estoque/produto/{id} → Consulta produto por ID
+
+PUT /estoque/produto/{id} → Atualiza produto
+
+DELETE /estoque/produto/{id} → Deleta produto
+
+
+
+2. Rotas do VendasService:
+
+GET /vendas/pedido → Lista todos os pedidos
+
+POST /vendas/pedido → Cria um novo pedido
+
+GET /vendas/pedido/{id} → Consulta pedido por ID
+
+
+
+3. BaseUrl global:
+
+Dentro do Docker, o Gateway acessa os serviços pelo nome do container (estoqueservice, vendasservice).
+
+
+
+
+
+---
+
 
 
 
