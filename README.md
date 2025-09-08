@@ -64,4 +64,35 @@ phpMyAdmin → http://localhost:8081
 
 
 
+---
+
+📌 Como rodar
+
+1. Gerar migrations localmente:
+
+
+
+cd VendasService
+dotnet ef migrations add InitialCreate
+cd ../EstoqueService
+dotnet ef migrations add InitialCreate
+
+2. Subir os containers:
+
+
+
+docker-compose up --build -d
+
+3. Verificar logs:
+
+
+
+docker logs vendasservice
+docker logs estoqueservice
+
+
+---
+
+
+
 
