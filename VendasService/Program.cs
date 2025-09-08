@@ -1,22 +1,22 @@
 using Microsoft.EntityFrameworkCore;
-using VendasService.Services;
-using VendasService.Messaging;
 using VendasService.Data;
+using VendasService.Repositories;
+using VendasService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Banco MySQL
+// Configuração do banco MySQL
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "server=mysql;database=vendasdb;user=root;password=secret";
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("MySqlConnection"),
-        new MySqlServerVersion(new Version(8, 0, 29))
-    )
-);
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// Injeção de dependências
-builder.Services.AddSingleton<RabbitMqPublisher>();
+// Injeção de dependência
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<PedidoService>();
+builder.Services.AddSingleton<RabbitMqPublisher>();
 
+// Controllers + Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -29,7 +29,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
-
