@@ -8,172 +8,164 @@
 
 ---
 
-
 Desenvolver uma aplicação com arquitetura de microserviços para gerenciamento de estoque de produtos e vendas em uma plataforma de e-commerce
 
+---
+
+# 🚀 Desafio de Microserviços – Vendas & Estoque
+
+Este projeto demonstra uma **arquitetura de microserviços moderna** em .NET 8, com **RabbitMQ, MySQL, API Gateway (Ocelot)** e **autenticação JWT**.  
+A aplicação é dividida em **VendasService** e **EstoqueService**, comunicando-se via mensagens assíncronas e expostos de forma centralizada através de um **API Gateway**.
 
 ---
 
-🔹 **Passos para rodar**
-
-1. Criar o banco de dados:
+## 📂 Estrutura do Projeto
 
 
-
-CREATE DATABASE vendasdb;
-
-2. Instalar pacotes NuGet:
-
-
-
-dotnet add package Pomelo.EntityFrameworkCore.MySql
-dotnet add package Microsoft.EntityFrameworkCore.Design
-
-3. Rodar migrations:
-
-
-
-dotnet ef migrations add InitialCreate
-dotnet ef database update
-
+<img width="816" height="1626" alt="Screenshot_20250908-164409" src="https://github.com/user-attachments/assets/b7c686be-d451-4a53-ba06-dafcfc4da218" />
 
 
 ---
 
-📌 Subindo tudo
+## 🛠️ Tecnologias Utilizadas
 
-Na raiz do projeto:
+- **.NET 8** – Web APIs minimalistas
+- **Entity Framework Core** – ORM para persistência em MySQL
+- **RabbitMQ** – Mensageria assíncrona entre serviços
+- **Ocelot API Gateway** – Roteamento centralizado
+- **JWT Authentication** – Segurança e autenticação
+- **Docker & Docker Compose** – Containerização e orquestração
+- **xUnit + Moq** – Testes automatizados
 
-docker-compose up -d
+---
 
-Verificar os containers:
+## ⚙️ Como Rodar o Projeto
 
-docker ps
+### 1. Pré-requisitos
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)  
+- [Postman](https://www.postman.com/downloads/) (opcional, para testar os endpoints)
 
-Acessos:
+### 2. Subir os serviços
+Na raiz do projeto, execute:
+```bash
+docker-compose up --build
 
-MySQL → localhost:3306 (root / 123456)
+Isso irá subir:
 
-RabbitMQ Dashboard → http://localhost:15672 (admin / admin)
+API Gateway → http://localhost:8000
 
-phpMyAdmin → http://localhost:8081
+RabbitMQ (painel) → http://localhost:15672 (user: guest / senha: guest)
 
+MySQL → usado pelos microserviços para persistência
+
+
+3. Autenticação (JWT)
+
+Antes de usar os endpoints, é necessário login:
+
+POST http://localhost:8000/auth/login
+
+{
+  "username": "admin",
+  "password": "123"
+}
+
+Resposta:
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5..."
+}
+
+👉 Copie o token e use no Authorization Header:
+
+Authorization: Bearer <seu_token>
 
 
 ---
 
+📦 Endpoints Disponíveis
+
+🔑 Auth
+
+POST /auth/login → retorna JWT válido
 
 
----
+📦 Estoque
 
-📌 Como rodar
+POST /estoque/produtos → cadastra produto
 
-1. Gerar migrations localmente:
+GET /estoque/produtos → lista produtos
 
-
-
-cd VendasService
-dotnet ef migrations add InitialCreate
-cd ../EstoqueService
-dotnet ef migrations add InitialCreate
-
-2. Subir os containers:
+GET /estoque/produtos/{id} → consulta produto por ID
 
 
+🛒 Vendas
 
-docker-compose up --build -d
+POST /vendas/pedidos → cria pedido (e publica mensagem no RabbitMQ)
 
-3. Verificar logs:
+GET /vendas/pedidos → lista pedidos
 
-
-
-docker logs vendasservice
-docker logs estoqueservice
-
-
----
-
----
-
-📌 Como usar o API Gateway
-
-1. Subir tudo:
-
-
-
-docker-compose up --build -d
-
-2. Testar rotas via Gateway:
-
-
-
-Produtos:
-
-curl http://localhost:5000/estoque/produto
-
-Pedidos:
-
-curl http://localhost:5000/vendas/pedido
-
-
-3. Acessar RabbitMQ em http://localhost:15672
-
-
-4. Acessar banco via phpMyAdmin em http://localhost:8081
-
+GET /vendas/pedidos/{id} → consulta pedido por ID
 
 
 
 ---
 
----
+🧪 Testes Automatizados
 
-✅ Detalhes importantes
+Cada serviço possui sua suíte de testes.
+Para rodar os testes, execute:
 
-1. Rotas do EstoqueService:
+dotnet test
 
-GET /estoque/produto → Lista todos os produtos
+EstoqueService.Tests → Testes de Produto
 
-POST /estoque/produto → Cria um novo produto
+VendasService.Tests → Testes de Pedido
 
-GET /estoque/produto/{id} → Consulta produto por ID
-
-PUT /estoque/produto/{id} → Atualiza produto
-
-DELETE /estoque/produto/{id} → Deleta produto
-
-
-
-2. Rotas do VendasService:
-
-GET /vendas/pedido → Lista todos os pedidos
-
-POST /vendas/pedido → Cria um novo pedido
-
-GET /vendas/pedido/{id} → Consulta pedido por ID
-
-
-
-3. BaseUrl global:
-
-Dentro do Docker, o Gateway acessa os serviços pelo nome do container (estoqueservice, vendasservice).
-
-
+ApiGateway.Tests → Testes de autenticação via JWT
 
 
 
 ---
 
+📑 Documentação
+
+Além deste README, há dois manuais disponíveis em /Manual:
+
+Manual_Leigos.md → passo a passo simples para usuários não técnicos
+
+Manual_Tecnico.md → explicação da arquitetura, código e testes
+
+
+Também há a coleção do Postman pronta para importação:
+
+📂 Manual/DesafioMicroservicos.postman_collection.json
+
+
+
 ---
 
-✅ 3) Criar Migration InitialCreate
+🎯 Conclusão
 
-No diretório VendasService, rode localmente:
+Este projeto cobre conceitos essenciais de microserviços modernos:
 
-dotnet ef migrations add InitialCreate -o Data/Migrations
+Comunicação assíncrona com RabbitMQ
 
+Persistência com MySQL e EF Core
+
+API Gateway com Ocelot
+
+Autenticação segura via JWT
+
+Testes automatizados com xUnit
+
+
+Pronto para ser usado como base de estudo ou como ponto de partida para sistemas distribuídos reais 🚀
 
 ---
+
+
+
 
 
 
