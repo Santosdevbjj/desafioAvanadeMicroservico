@@ -161,7 +161,8 @@ ApiGateway.Tests/ — AuthTests.cs.
 (Adaptar caso você tenha alterado nomes — mantenha consistência entre DbContext e Program.cs.)
 
 
-<img width="743" height="1435" alt="Screenshot_20250908-163825" src="https://github.com/user-attachments/assets/27d37cba-b9ee-4a68-a01f-9870b2d4f4bc" />
+<img width="816" height="1626" alt="Screenshot_20250908-164409" src="https://github.com/user-attachments/assets/4cde5f36-7bce-4648-bd52-0a1f32cbb83a" />
+
 
 
 
