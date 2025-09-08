@@ -10,3 +10,33 @@
 
 
 Desenvolver uma aplicação com arquitetura de microserviços para gerenciamento de estoque de produtos e vendas em uma plataforma de e-commerce
+
+
+---
+
+🔹 **Passos para rodar**
+
+1. Criar o banco de dados:
+
+
+
+CREATE DATABASE vendasdb;
+
+2. Instalar pacotes NuGet:
+
+
+
+dotnet add package Pomelo.EntityFrameworkCore.MySql
+dotnet add package Microsoft.EntityFrameworkCore.Design
+
+3. Rodar migrations:
+
+
+
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+
+---
+
+
