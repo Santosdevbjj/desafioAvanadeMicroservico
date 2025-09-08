@@ -13,6 +13,18 @@
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
+      "DownstreamPathTemplate": "/api/produto/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "estoqueservice",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/estoque/produto/{id}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+    },
+    {
       "DownstreamPathTemplate": "/api/pedido",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -23,6 +35,18 @@
       ],
       "UpstreamPathTemplate": "/vendas/pedido",
       "UpstreamHttpMethod": [ "GET", "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/pedido/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "vendasservice",
+          "Port": 8080
+        }
+      ],
+      "UpstreamPathTemplate": "/vendas/pedido/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
     }
   ],
   "GlobalConfiguration": {
