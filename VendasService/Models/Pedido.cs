@@ -3,6 +3,7 @@ namespace VendasService.Models;
 public class Pedido
 {
     public int Id { get; set; }
-    public DateTime Data { get; set; } = DateTime.Now;
-    public List<PedidoItem> Itens { get; set; } = new();
+    public string Cliente { get; set; } = string.Empty;
+    public DateTime Data { get; set; } = DateTime.UtcNow;
+    public List<ItemPedido> Itens { get; set; } = new();
 }
