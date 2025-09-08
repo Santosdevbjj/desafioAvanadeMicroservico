@@ -21,4 +21,18 @@ public class ProdutoService
     public async Task Update(Produto produto) => await _repository.Update(produto);
 
     public async Task Delete(int id) => await _repository.Delete(id);
+
+    public async Task BaixarEstoque(int produtoId, int quantidade)
+    {
+        var produto = await _repository.GetById(produtoId);
+        if (produto == null) throw new Exception("Produto não encontrado");
+
+        if (produto.Quantidade < quantidade)
+            throw new Exception("Estoque insuficiente");
+
+        produto.Quantidade -= quantidade;
+        await _repository.Update(produto);
+
+        Console.WriteLine($"[Estoque] Produto {produtoId} atualizado. Novo estoque: {produto.Quantidade}");
+    }
 }
