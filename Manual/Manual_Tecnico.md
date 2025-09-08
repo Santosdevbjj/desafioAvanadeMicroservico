@@ -160,54 +160,9 @@ ApiGateway.Tests/ — AuthTests.cs.
 
 (Adaptar caso você tenha alterado nomes — mantenha consistência entre DbContext e Program.cs.)
 
-/ (repo root)
-├─ ApiGateway/
-│  ├─ Program.cs
-│  ├─ ApiGateway.csproj
-│  ├─ ocelot.json
-│  ├─ Dockerfile
-│  └─ entrypoint.sh
-├─ EstoqueService/
-│  ├─ EstoqueService.csproj
-│  ├─ Program.cs
-│  ├─ appsettings.json
-│  ├─ Dockerfile
-│  ├─ entrypoint.sh
-│  ├─ Controllers/EstoqueController.cs
-│  ├─ Data/EstoqueContext.cs
-│  ├─ Data/Migrations/InitialCreate...
-│  ├─ Models/Produto.cs
-│  ├─ Repositories/IProdutoRepository.cs
-│  ├─ Repositories/ProdutoRepository.cs
-│  └─ Messaging/RabbitMqConsumer.cs
-├─ VendasService/
-│  ├─ VendasService.csproj
-│  ├─ Program.cs
-│  ├─ appsettings.json
-│  ├─ Dockerfile
-│  ├─ entrypoint.sh
-│  ├─ Controllers/PedidoController.cs
-│  ├─ Data/VendasContext.cs (ou AppDbContext.cs)
-│  ├─ Data/Migrations/InitialCreate...
-│  ├─ Models/Pedido.cs
-│  ├─ Models/ItemPedido.cs
-│  ├─ Repositories/IPedidoRepository.cs
-│  ├─ Repositories/PedidoRepository.cs
-│  ├─ Services/PedidoService.cs
-│  └─ Messaging/RabbitMqPublisher.cs
-├─ Shared/
-│  ├─ Shared.csproj
-│  ├─ DTOs/ProdutoDTO.cs
-│  └─ Auth/JwtTokenService.cs
-├─ Tests/
-│  ├─ EstoqueService.Tests/
-│  ├─ VendasService.Tests/
-│  └─ ApiGateway.Tests/
-├─ docker-compose.yml
-└─ Manual/
-   ├─ Manual_Leigos.md
-   ├─ Manual_Tecnico.md  <-- (este arquivo)
-   └─ DesafioMicroservicos.postman_collection.json
+
+<img width="743" height="1435" alt="Screenshot_20250908-163825" src="https://github.com/user-attachments/assets/27d37cba-b9ee-4a68-a01f-9870b2d4f4bc" />
+
 
 
 ---
