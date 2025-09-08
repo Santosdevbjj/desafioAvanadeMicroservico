@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Desafio Avanade - Microserviços",
+    "_postman_id": "b1234567-abcd-4321-ab12-abcdef123456",
+    "description": "Coleção de requisições para testar EstoqueService, VendasService e API Gateway com JWT.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["auth", "login"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Estoque - Cadastrar Produto",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/estoque/api/produtos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["estoque", "api", "produtos"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Notebook Dell\",\n  \"descricao\": \"i7, 16GB RAM\",\n  \"preco\": 4500.00,\n  \"quantidade\": 10\n}"
+        }
+      }
+    },
+    {
+      "name": "Estoque - Listar Produtos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/estoque/api/produtos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["estoque", "api", "produtos"]
+        }
+      }
+    },
+    {
+      "name": "Vendas - Criar Pedido",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/vendas/api/pedidos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["vendas", "api", "pedidos"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"produtoId\": 1,\n  \"quantidade\": 2\n}"
+        }
+      }
+    },
+    {
+      "name": "Vendas - Listar Pedidos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{jwt_token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/vendas/api/pedidos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["vendas", "api", "pedidos"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ]
+}
