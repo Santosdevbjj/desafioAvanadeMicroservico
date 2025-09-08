@@ -1,28 +1,35 @@
 using Microsoft.AspNetCore.Mvc;
 using VendasService.Models;
-using VendasService.Repositories;
+using VendasService.Services;
 
 namespace VendasService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PedidosController : ControllerBase
+public class PedidoController : ControllerBase
 {
-    private readonly PedidoRepository _repository;
+    private readonly PedidoService _service;
 
-    public PedidosController(PedidoRepository repository)
+    public PedidoController(PedidoService service)
     {
-        _repository = repository;
+        _service = service;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() =>
-        Ok(await _repository.GetAll());
+    public IActionResult GetAll() => Ok(_service.GetAll());
+
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        var pedido = _service.GetById(id);
+        if (pedido == null) return NotFound();
+        return Ok(pedido);
+    }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Pedido pedido)
+    public IActionResult CriarPedido([FromBody] Pedido pedido)
     {
-        await _repository.Add(pedido);
-        return CreatedAtAction(nameof(GetAll), new { id = pedido.Id }, pedido);
+        var novoPedido = _service.CriarPedido(pedido);
+        return CreatedAtAction(nameof(GetById), new { id = novoPedido.Id }, novoPedido);
     }
 }
