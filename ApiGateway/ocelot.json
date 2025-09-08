@@ -1,55 +1,34 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/produto",
+      "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "estoqueservice",
-          "Port": 8081
-        }
+        { "Host": "vendasservice", "Port": 80 }
       ],
-      "UpstreamPathTemplate": "/estoque/produto",
+      "UpstreamPathTemplate": "/vendas/{everything}",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/api/produto/{id}",
+      "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "estoqueservice",
-          "Port": 8081
-        }
+        { "Host": "estoqueservice", "Port": 80 }
       ],
-      "UpstreamPathTemplate": "/estoque/produto/{id}",
-      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]
+      "UpstreamPathTemplate": "/estoque/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "DownstreamPathTemplate": "/api/pedido",
+      "DownstreamPathTemplate": "/auth/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-        {
-          "Host": "vendasservice",
-          "Port": 8080
-        }
+        { "Host": "vendasservice", "Port": 80 }
       ],
-      "UpstreamPathTemplate": "/vendas/pedido",
-      "UpstreamHttpMethod": [ "GET", "POST" ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/pedido/{id}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "vendasservice",
-          "Port": 8080
-        }
-      ],
-      "UpstreamPathTemplate": "/vendas/pedido/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamPathTemplate": "/auth/{everything}",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://apigateway:8080"
+    "BaseUrl": "http://localhost:8080"
   }
 }
