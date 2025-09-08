@@ -1,10 +1,10 @@
 version: '3.9'
 
 services:
+  # Banco de Dados MySQL
   mysql:
     image: mysql:8.0
-    container_name: mysql_db
-    restart: always
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: vendasdb
@@ -13,71 +13,67 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - ecommerce_net
+      - backend
 
+  # RabbitMQ para mensageria
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    restart: always
     ports:
       - "5672:5672"
       - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
     networks:
-      - ecommerce_net
+      - backend
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: phpmyadmin
-    restart: always
-    environment:
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: 123456
-    ports:
-      - "8081:80"
-    networks:
-      - ecommerce_net
-
+  # Serviço de Vendas
   vendasservice:
-    build: ./VendasService
+    build:
+      context: .
+      dockerfile: VendasService/Dockerfile
     container_name: vendasservice
     depends_on:
       - mysql
       - rabbitmq
+    environment:
+      - ConnectionStrings__DefaultConnection=server=mysql;port=3306;database=vendasdb;user=root;password=123456
     ports:
-      - "5001:8080"
+      - "5001:5001"
     networks:
-      - ecommerce_net
+      - backend
 
+  # Serviço de Estoque
   estoqueservice:
-    build: ./EstoqueService
+    build:
+      context: .
+      dockerfile: EstoqueService/Dockerfile
     container_name: estoqueservice
     depends_on:
       - mysql
       - rabbitmq
+    environment:
+      - ConnectionStrings__DefaultConnection=server=mysql;port=3306;database=estoquedb;user=root;password=123456
     ports:
-      - "5002:8081"
+      - "5002:5002"
     networks:
-      - ecommerce_net
+      - backend
 
+  # API Gateway com Ocelot
   apigateway:
-    build: ./ApiGateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
     container_name: apigateway
     depends_on:
       - vendasservice
       - estoqueservice
     ports:
-      - "5000:8080"
+      - "8080:8080"
     networks:
-      - ecommerce_net
+      - backend
 
 volumes:
   mysql_data:
 
 networks:
-  ecommerce_net:
+  backend:
     driver: bridge
-
