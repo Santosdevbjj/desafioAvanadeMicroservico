@@ -1,58 +1,44 @@
 using VendasService.Models;
-using VendasService.Data;
-using VendasService.Messaging;
-using Microsoft.EntityFrameworkCore;
+using VendasService.Repositories;
 
-namespace VendasService.Services;
-
-public class PedidoService
+namespace VendasService.Services
 {
-    private readonly AppDbContext _context;
-    private readonly RabbitMqPublisher _publisher;
-
-    public PedidoService(AppDbContext context, RabbitMqPublisher publisher)
+    /// <summary>
+    /// Serviço de regras de negócio para pedidos.
+    /// Agora depende de IPedidoRepository (em vez de DbContext direto).
+    /// </summary>
+    public class PedidoService
     {
-        _context = context;
-        _publisher = publisher;
-    }
+        private readonly IPedidoRepository _repository;
+        private readonly RabbitMqPublisher _publisher;
 
-    public async Task<List<Pedido>> GetAllAsync()
-    {
-        return await _context.Pedidos
-            .Include(p => p.Itens)
-            .ToListAsync();
-    }
-
-    public async Task<Pedido?> GetByIdAsync(int id)
-    {
-        return await _context.Pedidos
-            .Include(p => p.Itens)
-            .FirstOrDefaultAsync(p => p.Id == id);
-    }
-
-    public async Task<Pedido> CriarPedidoAsync(Pedido pedido)
-    {
-        pedido.Data = DateTime.UtcNow;
-
-        _context.Pedidos.Add(pedido);
-        await _context.SaveChangesAsync();
-
-        // Publica no RabbitMQ
-        var pedidoMsg = new PedidoMessage
+        public PedidoService(IPedidoRepository repository, RabbitMqPublisher publisher)
         {
-            PedidoId = pedido.Id,
-            Itens = pedido.Itens.Select(i => new ItemPedidoMessage
-            {
-                ProdutoId = i.ProdutoId,
-                Quantidade = i.Quantidade
-            }).ToList()
-        };
+            _repository = repository;
+            _publisher = publisher;
+        }
 
-        _publisher.PublicarPedido(pedidoMsg);
+        public async Task<Pedido> CriarPedidoAsync(Pedido pedido)
+        {
+            pedido.Data = DateTime.UtcNow;
 
-        return pedido;
+            // Salva no banco
+            var pedidoCriado = await _repository.AddAsync(pedido);
+
+            // Publica no RabbitMQ (para EstoqueService consumir)
+            _publisher.PublishPedidoCriado(pedidoCriado);
+
+            return pedidoCriado;
+        }
+
+        public async Task<List<Pedido>> ListarPedidosAsync()
+        {
+            return await _repository.GetAllAsync();
+        }
+
+        public async Task<Pedido?> BuscarPorIdAsync(int id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
     }
 }
-
-
-
