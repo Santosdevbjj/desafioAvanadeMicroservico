@@ -1,28 +1,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Yarp.ReverseProxy;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configura o YARP (API Gateway)
-builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 
-// Configura autenticação JWT
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer(options =>
-    {
-        options.Authority = "http://localhost:5000";
-        options.Audience = "api";
-        options.RequireHttpsMetadata = false;
-    });
+builder.Services.AddOcelot();
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapReverseProxy();
+await app.UseOcelot();
 
 app.Run();
