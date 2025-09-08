@@ -37,6 +37,31 @@ dotnet ef migrations add InitialCreate
 dotnet ef database update
 
 
+
 ---
+
+📌 Subindo tudo
+
+Na raiz do projeto:
+
+docker-compose up -d
+
+Verificar os containers:
+
+docker ps
+
+Acessos:
+
+MySQL → localhost:3306 (root / 123456)
+
+RabbitMQ Dashboard → http://localhost:15672 (admin / admin)
+
+phpMyAdmin → http://localhost:8081
+
+
+
+---
+
+
 
 
