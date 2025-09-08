@@ -164,6 +164,18 @@ Dentro do Docker, o Gateway acessa os serviços pelo nome do container (estoques
 
 ---
 
+---
+
+✅ 3) Criar Migration InitialCreate
+
+No diretório VendasService, rode localmente:
+
+dotnet ef migrations add InitialCreate -o Data/Migrations
+
+
+---
+
+
 
 
 
