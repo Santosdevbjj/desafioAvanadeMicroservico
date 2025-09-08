@@ -1,36 +1,28 @@
-using Microsoft.EntityFrameworkCore;
 using EstoqueService.Data;
 using EstoqueService.Repositories;
 using EstoqueService.Services;
-using EstoqueService.Messaging;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configura MySQL
+// Add DbContext
 builder.Services.AddDbContext<EstoqueContext>(options =>
-    options.UseMySql(builder.Configuration.GetConnectionString("MySQL"),
-    new MySqlServerVersion(new Version(8, 0, 32))));
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+    ));
 
-// Injeta dependências
-builder.Services.AddScoped<ProdutoRepository>();
-builder.Services.AddScoped<ProdutoService>();
+// Add Repository
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
-// Adiciona Consumer RabbitMQ
+// Add RabbitMQ Consumer
 builder.Services.AddHostedService<RabbitMqConsumer>();
 
+// Add Controllers
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
