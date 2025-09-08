@@ -1,34 +1,56 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Shared.Auth;
 using VendasService.Data;
 using VendasService.Repositories;
 using VendasService.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuração do banco MySQL
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "server=mysql;database=vendasdb;user=root;password=secret";
+// Configuração do banco de dados
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Injeção de dependência
+// Repositórios e serviços
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<PedidoService>();
-builder.Services.AddSingleton<RabbitMqPublisher>();
 
-// Controllers + Swagger
+// JWT Token Service
+builder.Services.AddScoped<JwtTokenService>();
+
+// Configuração de autenticação JWT
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "chave_super_secreta_123";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "AvanadeAuth";
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
+
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseRouting();
 
+// Ativa autenticação/autorização
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();
