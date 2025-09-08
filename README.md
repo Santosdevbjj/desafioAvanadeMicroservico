@@ -8,6 +8,9 @@
 
 ---
 
+
+---
+
 Desenvolver uma aplicação com arquitetura de microserviços para gerenciamento de estoque de produtos e vendas em uma plataforma de e-commerce
 
 ---
@@ -169,6 +172,10 @@ Pronto para ser usado como base de estudo ou como ponto de partida para sistemas
 
 
 
+---
+
+LinkedIn: https://www.linkedin.com/in/santossergioluiz
+---
 
 
 
