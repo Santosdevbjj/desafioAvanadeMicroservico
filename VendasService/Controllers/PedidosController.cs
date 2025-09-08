@@ -16,20 +16,28 @@ public class PedidoController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll() => Ok(_service.GetAll());
+    public async Task<IActionResult> GetAll()
+    {
+        var pedidos = await _service.GetAllAsync();
+        return Ok(pedidos);
+    }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var pedido = _service.GetById(id);
+        var pedido = await _service.GetByIdAsync(id);
         if (pedido == null) return NotFound();
         return Ok(pedido);
     }
 
     [HttpPost]
-    public IActionResult CriarPedido([FromBody] Pedido pedido)
+    public async Task<IActionResult> CriarPedido([FromBody] Pedido pedido)
     {
-        var novoPedido = _service.CriarPedido(pedido);
+        var novoPedido = await _service.CriarPedidoAsync(pedido);
         return CreatedAtAction(nameof(GetById), new { id = novoPedido.Id }, novoPedido);
     }
 }
+
+
+
+
