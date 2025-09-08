@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using EstoqueService.Data;
 using EstoqueService.Repositories;
 using EstoqueService.Services;
+using EstoqueService.Messaging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddDbContext<EstoqueContext>(options =>
 // Injeta dependências
 builder.Services.AddScoped<ProdutoRepository>();
 builder.Services.AddScoped<ProdutoService>();
+
+// Adiciona Consumer RabbitMQ
+builder.Services.AddHostedService<RabbitMqConsumer>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -27,7 +31,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
