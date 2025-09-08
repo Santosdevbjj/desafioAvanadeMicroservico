@@ -5,9 +5,11 @@ using Yarp.ReverseProxy;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configura o YARP (API Gateway)
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+// Configura autenticação JWT
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
     {
@@ -17,8 +19,10 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 var app = builder.Build();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapReverseProxy();
 
 app.Run();
