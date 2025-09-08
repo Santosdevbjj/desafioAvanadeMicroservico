@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "Avanade Microservicos",
+    "_postman_id": "d3e8e71f-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "description": "Coleção de testes para EstoqueService, VendasService e API Gateway",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Gerar Token",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Estoque - Listar Produtos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/estoque/produto",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["estoque", "produto"]
+        }
+      }
+    },
+    {
+      "name": "Estoque - Criar Produto",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Teclado Gamer\",\n  \"descricao\": \"Switch azul, RGB\",\n  \"preco\": 299.90,\n  \"quantidade\": 10\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/estoque/produto",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["estoque", "produto"]
+        }
+      }
+    },
+    {
+      "name": "Vendas - Criar Pedido",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"Sérgio Santos\",\n  \"itens\": [\n    { \"produtoId\": 1, \"quantidade\": 2 }\n  ]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/vendas/pedido",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["vendas", "pedido"]
+        }
+      }
+    },
+    {
+      "name": "Vendas - Listar Pedidos",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/vendas/pedido",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["vendas", "pedido"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
