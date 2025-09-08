@@ -1,18 +1,51 @@
 version: '3.9'
+
 services:
   mysql:
     image: mysql:8.0
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ecommerce
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: vendasdb
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ecommerce_net
 
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbit_mq
+    container_name: rabbitmq
+    restart: always
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5672:5672"   # Porta para conexão com apps
+      - "15672:15672" # Painel de administração Web
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks:
+      - ecommerce_net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: 123456
+    ports:
+      - "8081:80"
+    networks:
+      - ecommerce_net
+
+volumes:
+  mysql_data:
+
+networks:
+  ecommerce_net:
+    driver: bridge
+
+
