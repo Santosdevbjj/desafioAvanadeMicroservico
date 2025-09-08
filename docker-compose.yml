@@ -63,9 +63,21 @@ services:
     networks:
       - ecommerce_net
 
+  apigateway:
+    build: ./ApiGateway
+    container_name: apigateway
+    depends_on:
+      - vendasservice
+      - estoqueservice
+    ports:
+      - "5000:8080"
+    networks:
+      - ecommerce_net
+
 volumes:
   mysql_data:
 
 networks:
   ecommerce_net:
     driver: bridge
+
