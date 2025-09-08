@@ -172,10 +172,10 @@ Pronto para ser usado como base de estudo ou como ponto de partida para sistemas
 
 
 
----
 
-LinkedIn: https://www.linkedin.com/in/santossergioluiz
----
+
+
+
 
 
 
