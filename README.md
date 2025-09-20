@@ -51,13 +51,14 @@ A aplicação é dividida em **VendasService** e **EstoqueService**, comunicando
 - [Postman](https://www.postman.com/downloads/) (opcional, para testar os endpoints)
 
 ### 2. Subir os serviços
+
 Na raiz do projeto, execute:
 ```bash
 docker-compose up --build
 
 ```
 
-Isso irá subir:
+**Isso irá subir:**
 
 API Gateway → http://localhost:8000
 
@@ -66,7 +67,7 @@ RabbitMQ (painel) → http://localhost:15672 (user: guest / senha: guest)
 MySQL → usado pelos microserviços para persistência
 
 
-3. Autenticação (JWT)
+**3. Autenticação (JWT)**
 
 Antes de usar os endpoints, é necessário login:
 
@@ -90,14 +91,14 @@ Authorization: Bearer <seu_token>
 
 ---
 
-📦 Endpoints Disponíveis
+📦 **Endpoints Disponíveis**
 
 🔑 Auth
 
 POST /auth/login → retorna JWT válido
 
 
-📦 Estoque
+📦 **Estoque*"
 
 POST /estoque/produtos → cadastra produto
 
@@ -106,7 +107,7 @@ GET /estoque/produtos → lista produtos
 GET /estoque/produtos/{id} → consulta produto por ID
 
 
-🛒 Vendas
+🛒 **Vendas**
 
 POST /vendas/pedidos → cria pedido (e publica mensagem no RabbitMQ)
 
@@ -118,7 +119,7 @@ GET /vendas/pedidos/{id} → consulta pedido por ID
 
 ---
 
-🧪 Testes Automatizados
+🧪 **Testes Automatizados**
 
 Cada serviço possui sua suíte de testes.
 Para rodar os testes, execute:
@@ -135,24 +136,24 @@ ApiGateway.Tests → Testes de autenticação via JWT
 
 ---
 
-📑 Documentação
+📑 **Documentação**
 
 Além deste README, há dois manuais disponíveis em /Manual:
 
-Manual_Leigos.md → passo a passo simples para usuários não técnicos
+**Manual_Leigos.md** → passo a passo simples para usuários não técnicos
 
-Manual_Tecnico.md → explicação da arquitetura, código e testes
+**Manual_Tecnico.md** → explicação da arquitetura, código e testes
 
 
 Também há a coleção do Postman pronta para importação:
 
-📂 Manual/DesafioMicroservicos.postman_collection.json
+📂 **Manual/DesafioMicroservicos.postman_collection.json**
 
 
 
 ---
 
-🎯 Conclusão
+🎯 **Conclusão**
 
 Este projeto cobre conceitos essenciais de microserviços modernos:
 
