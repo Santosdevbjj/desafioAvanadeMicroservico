@@ -55,6 +55,8 @@ Na raiz do projeto, execute:
 ```bash
 docker-compose up --build
 
+```
+
 Isso irá subir:
 
 API Gateway → http://localhost:8000
